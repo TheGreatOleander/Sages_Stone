@@ -22,3 +22,5 @@ packages = ["systems"]
 [tool.setuptools.package-data]
 systems = ["**/*"]
 
+[project.scripts]
+sages-stone = "systems.cli:main"
