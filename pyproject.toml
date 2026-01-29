@@ -10,16 +10,15 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [
-    { name = "Jimmyjug777" }
+    { name = "TheGreatOleander" }
 ]
 
 dependencies = []
 
 [tool.setuptools]
-# EXPLICITLY declare the ONE installable package.
-# Everything else in the repo is non-installable research/support.
-packages = ["sages_stone"]
+# This is the ONLY real Python package in the repo
+packages = ["systems"]
 
 [tool.setuptools.package-data]
-sages_stone = ["**/*"]
+systems = ["**/*"]
 
