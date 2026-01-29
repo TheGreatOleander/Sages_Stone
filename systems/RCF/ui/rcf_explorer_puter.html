@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCF Explorer - Puter Edition</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Left Control Panel */
+        .control-panel {
+            width: 320px;
+            background: rgba(30, 30, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .app-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #a78bfa;
+            margin-bottom: 24px;
+            text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+        }
+        
+        .section {
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        
+        .control-group {
+            margin-bottom: 16px;
+        }
+        
+        .control-label {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background: #374151;
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #a78bfa;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            font-family: 'Courier New', monospace;
+            color: white;
+            font-weight: bold;
+            min-width: 40px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-run {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-pause {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-reset {
+            background: #6366f1;
+            color: white;
+        }
+        
+        .btn-export {
+            background: #059669;
+            color: white;
+        }
+        
+        .btn-save {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .status-box {
+            background: rgba(17, 24, 39, 0.8);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .metric {
+            margin-bottom: 16px;
+        }
+        
+        .metric:last-child {
+            margin-bottom: 0;
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+        
+        .metric-value {
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: bold;
+            color: #60a5fa;
+        }
+        
+        .metric-value.stress {
+            color: #f87171;
+        }
+        
+        .alert-box {
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+        
+        .alert-collapse {
+            background: rgba(127, 29, 29, 0.8);
+            border: 1px solid #dc2626;
+        }
+        
+        .alert-stable {
+            background: rgba(6, 78, 59, 0.8);
+            border: 1px solid #059669;
+        }
+        
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        /* Right Visualization Panel */
+        .viz-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #111827;
+        }
+        
+        .tabs {
+            display: flex;
+            background: rgba(31, 41, 55, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab {
+            padding: 16px 24px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .tab.active {
+            border-bottom-color: #a78bfa;
+            color: #a78bfa;
+        }
+        
+        .tab-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 500px;
+            background: rgba(10, 14, 26, 0.8);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .narrative-entry {
+            background: rgba(31, 41, 55, 0.6);
+            border-left: 3px solid #a78bfa;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            font-style: italic;
+            color: #d1d5db;
+        }
+        
+        .law-score {
+            background: rgba(31, 41, 55, 0.6);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .law-score-name {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .law-score-value {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: bold;
+            color: #a78bfa;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Control Panel -->
+        <div class="control-panel">
+            <div class="app-title">🌌 RCF EXPLORER</div>
+            
+            <div class="section">
+                <div class="section-title">CONFIGURATION</div>
+                
+                <div class="control-group">
+                    <label class="control-label">Dimensions</label>
+                    <div class="slider-container">
+                        <input type="range" id="dimensionsSlider" min="2" max="8" value="3" step="1">
+                        <span class="slider-value" id="dimensionsValue">3</span>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">Frames</label>
+                    <div class="slider-container">
+                        <input type="range" id="framesSlider" min="50" max="500" value="200" step="50">
+                        <span class="slider-value" id="framesValue">200</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">CONTROLS</div>
+                
+                <button class="btn btn-run" id="runBtn">▶ RUN</button>
+                <button class="btn btn-pause" id="pauseBtn" disabled>⏸ PAUSE</button>
+                <button class="btn btn-reset" id="resetBtn">↻ RESET</button>
+                <button class="btn btn-export" id="exportBtn" disabled>⤓ EXPORT DATA</button>
+                <button class="btn btn-save" id="saveBtn" disabled>💾 SAVE TO PUTER</button>
+            </div>
+            
+            <div class="status-box">
+                <div class="section-title">CURRENT STATUS</div>
+                
+                <div class="metric">
+                    <div class="metric-label">Volley</div>
+                    <div class="metric-value" id="volleyText">0/200</div>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Magnitude</div>
+                    <div class="metric-value" id="magnitudeText">0.000</div>
+                </div>
+                
+                <div class="metric">
+                    <div class="metric-label">Global Stress</div>
+                    <div class="metric-value stress" id="stressText">0.000</div>
+                </div>
+            </div>
+            
+            <div id="collapseAlert" class="alert-box alert-collapse" style="display: none;">
+                <div class="alert-title">⚠ COLLAPSE DETECTED</div>
+                <div id="collapseMessage"></div>
+            </div>
+            
+            <div id="stableAlert" class="alert-box alert-stable" style="display: none;">
+                <div class="alert-title">✓ STABLE RUN ACHIEVED</div>
+                <div>The dance continued without collapse.</div>
+            </div>
+        </div>
+        
+        <!-- Right Visualization Panel -->
+        <div class="viz-panel">
+            <div class="tabs">
+                <div class="tab active" data-tab="magnitude">📊 Magnitude</div>
+                <div class="tab" data-tab="phase">🎯 Phase Space</div>
+                <div class="tab" data-tab="narrative">📜 Narrative</div>
+                <div class="tab" data-tab="laws">⚖️ Law Scores</div>
+            </div>
+            
+            <div class="tab-content active" id="magnitude-content">
+                <h2 style="margin-bottom: 20px;">State Magnitude Evolution</h2>
+                <canvas id="magnitudeCanvas"></canvas>
+            </div>
+            
+            <div class="tab-content" id="phase-content">
+                <h2 style="margin-bottom: 20px;">Intent vs Memory Phase Space</h2>
+                <canvas id="phaseCanvas"></canvas>
+            </div>
+            
+            <div class="tab-content" id="narrative-content">
+                <h2 style="margin-bottom: 20px;">Emergent Narrative</h2>
+                <div id="narrativeLog"></div>
+            </div>
+            
+            <div class="tab-content" id="laws-content">
+                <h2 style="margin-bottom: 20px;">Constraint Survival Metrics</h2>
+                <div id="lawScoresList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        // Import RCF core
+        const RCF = {
+            state: null,
+            history: [],
+            narrative: [],
+            lawScores: [],
+            dimensions: 3,
+            frames: 200,
+            currentFrame: 0,
+            isRunning: false,
+            collapsed: false,
+            intervalId: null,
+            
+            init(dimensions, frames) {
+                this.dimensions = dimensions;
+                this.frames = frames;
+                this.reset();
+            },
+            
+            reset() {
+                this.state = {
+                    vector: Array(this.dimensions).fill(0).map(() => Math.random() * 1 + 0.5),
+                    intent: 0,
+                    memory: 0,
+                    globalStress: 0,
+                    fatigueMap: {}
+                };
+                this.history = [];
+                this.narrative = [];
+                this.lawScores = [];
+                this.currentFrame = 0;
+                this.collapsed = false;
+            },
+            
+            magnitude(vec) {
+                return Math.sqrt(vec.reduce((sum, v) => sum + v * v, 0));
+            },
+            
+            step() {
+                if (this.collapsed || this.currentFrame >= this.frames) {
+                    this.stop();
+                    return false;
+                }
+                
+                const volley = this.currentFrame;
+                const storm = volley % 20 === 0;
+                
+                // Apply transformations
+                this.state.vector = this.state.vector.map(v => v * 0.9);
+                this.state.intent += 0.1;
+                
+                const scale = storm ? 0.08 : 0.02;
+                this.state.vector = this.state.vector.map(v => v + (Math.random() - 0.5) * scale * 2);
+                this.state.intent += storm ? 0.3 : 0.1;
+                
+                const mean = this.state.vector.reduce((a, b) => a + b, 0) / this.state.vector.length;
+                const drift = (0.5 - (mean % 1)) * 0.015;
+                this.state.vector = this.state.vector.map(v => v + drift);
+                
+                if (volley % 4 === 0) {
+                    const factor = 1.01 + 0.01 * Math.sin(this.state.intent);
+                    this.state.vector = this.state.vector.map(v => v * factor);
+                    this.state.intent += 0.5;
+                    
+                    if (storm) {
+                        this.narrative.push(`⚡ Storm + Resonance at volley ${volley} → amplified chaos`);
+                    }
+                }
+                
+                if (volley > 30) {
+                    this.state.vector = this.state.vector.map(v => v * 0.5);
+                    this.state.intent -= 1.0;
+                }
+                
+                if (volley % 5 === 0) {
+                    this.state.memory += 0.2;
+                }
+                
+                if (volley % 7 === 0) {
+                    this.state.vector = this.state.vector.map(v => v + this.state.intent * 0.01);
+                }
+                
+                const mag = this.magnitude(this.state.vector);
+                this.state.globalStress += 0.02 + Math.abs(drift) + 0.01;
+                const effectiveLimit = 5.0 - this.state.globalStress;
+                
+                // Check collapse
+                if (mag >= effectiveLimit || effectiveLimit <= 0.1) {
+                    this.collapsed = true;
+                    this.narrative.push("🌌 Global Collapse → 'The envelope shrank to silence.'");
+                    return false;
+                }
+                
+                if (mag <= 0.1 || mag >= 5.0) {
+                    this.collapsed = true;
+                    this.narrative.push("⚠️ Collision → The Stern Judge: 'Order must be kept.'");
+                    return false;
+                }
+                
+                // Update history
+                this.history.push({
+                    volley,
+                    magnitude: mag,
+                    intent: this.state.intent,
+                    memory: this.state.memory,
+                    globalStress: this.state.globalStress
+                });
+                
+                // Calculate law scores
+                if (volley % 10 === 0) {
+                    const stabilityScore = 1 / (1 + this.state.globalStress);
+                    const persistenceScore = volley / this.frames;
+                    const dimensionalScore = this.dimensions / 6;
+                    const lawScore = (persistenceScore * stabilityScore * dimensionalScore) / (1 + Math.abs(mag - 2.5));
+                    
+                    this.lawScores.push({
+                        volley,
+                        score: lawScore,
+                        stability: stabilityScore
+                    });
+                }
+                
+                this.currentFrame++;
+                return true;
+            },
+            
+            run() {
+                this.isRunning = true;
+                this.intervalId = setInterval(() => {
+                    const cont = this.step();
+                    UI.update();
+                    if (!cont) {
+                        this.stop();
+                    }
+                }, 50);
+            },
+            
+            stop() {
+                this.isRunning = false;
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+            }
+        };
+        
+        // UI Controller
+        const UI = {
+            init() {
+                // Sliders
+                document.getElementById('dimensionsSlider').addEventListener('input', (e) => {
+                    document.getElementById('dimensionsValue').textContent = e.target.value;
+                });
+                
+                document.getElementById('framesSlider').addEventListener('input', (e) => {
+                    document.getElementById('framesValue').textContent = e.target.value;
+                });
+                
+                // Buttons
+                document.getElementById('runBtn').addEventListener('click', () => {
+                    const dims = parseInt(document.getElementById('dimensionsSlider').value);
+                    const frames = parseInt(document.getElementById('framesSlider').value);
+                    RCF.init(dims, frames);
+                    RCF.run();
+                    this.update();
+                });
+                
+                document.getElementById('pauseBtn').addEventListener('click', () => {
+                    RCF.stop();
+                    this.update();
+                });
+                
+                document.getElementById('resetBtn').addEventListener('click', () => {
+                    RCF.reset();
+                    this.update();
+                });
+                
+                document.getElementById('exportBtn').addEventListener('click', () => {
+                    this.exportData();
+                });
+                
+                document.getElementById('saveBtn').addEventListener('click', () => {
+                    this.saveToPuter();
+                });
+                
+                // Tabs
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.getElementById(tab.dataset.tab + '-content').classList.add('active');
+                    });
+                });
+            },
+            
+            update() {
+                // Update buttons
+                document.getElementById('runBtn').disabled = RCF.isRunning;
+                document.getElementById('pauseBtn').disabled = !RCF.isRunning;
+                document.getElementById('exportBtn').disabled = RCF.history.length === 0;
+                document.getElementById('saveBtn').disabled = RCF.history.length === 0;
+                
+                // Update status
+                document.getElementById('volleyText').textContent = `${RCF.currentFrame}/${RCF.frames}`;
+                document.getElementById('magnitudeText').textContent = RCF.state ? RCF.magnitude(RCF.state.vector).toFixed(3) : '0.000';
+                document.getElementById('stressText').textContent = RCF.state ? RCF.state.globalStress.toFixed(3) : '0.000';
+                
+                // Alerts
+                if (RCF.collapsed) {
+                    document.getElementById('collapseAlert').style.display = 'block';
+                    document.getElementById('collapseMessage').textContent = RCF.narrative[RCF.narrative.length - 1];
+                    document.getElementById('stableAlert').style.display = 'none';
+                } else if (RCF.currentFrame >= RCF.frames && RCF.currentFrame > 0) {
+                    document.getElementById('stableAlert').style.display = 'block';
+                    document.getElementById('collapseAlert').style.display = 'none';
+                } else {
+                    document.getElementById('collapseAlert').style.display = 'none';
+                    document.getElementById('stableAlert').style.display = 'none';
+                }
+                
+                // Update charts
+                this.drawMagnitudeChart();
+                this.drawPhaseChart();
+                this.updateNarrative();
+                this.updateLawScores();
+            },
+            
+            drawMagnitudeChart() {
+                const canvas = document.getElementById('magnitudeCanvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = canvas.offsetWidth;
+                canvas.height = 500;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                if (RCF.history.length === 0) return;
+                
+                const padding = 40;
+                const width = canvas.width - 2 * padding;
+                const height = canvas.height - 2 * padding;
+                
+                // Draw axes
+                ctx.strokeStyle = '#374151';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(padding, padding);
+                ctx.lineTo(padding, canvas.height - padding);
+                ctx.lineTo(canvas.width - padding, canvas.height - padding);
+                ctx.stroke();
+                
+                // Draw data
+                ctx.strokeStyle = '#60a5fa';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                RCF.history.forEach((point, i) => {
+                    const x = padding + (i / RCF.frames) * width;
+                    const y = canvas.height - padding - (point.magnitude / 6) * height;
+                    
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                
+                ctx.stroke();
+            },
+            
+            drawPhaseChart() {
+                const canvas = document.getElementById('phaseCanvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = canvas.offsetWidth;
+                canvas.height = 500;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                if (RCF.history.length === 0) return;
+                
+                // Draw points
+                RCF.history.forEach(point => {
+                    const x = (point.intent + 5) / 10 * canvas.width;
+                    const y = canvas.height - (point.memory / 2) * canvas.height;
+                    
+                    ctx.fillStyle = 'rgba(167, 139, 250, 0.6)';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            },
+            
+            updateNarrative() {
+                const log = document.getElementById('narrativeLog');
+                log.innerHTML = RCF.narrative.map(entry => 
+                    `<div class="narrative-entry">${entry}</div>`
+                ).join('');
+            },
+            
+            updateLawScores() {
+                const list = document.getElementById('lawScoresList');
+                list.innerHTML = RCF.lawScores.slice(-10).map(score => `
+                    <div class="law-score">
+                        <div>
+                            <div class="law-score-name">Volley ${score.volley}</div>
+                            <div style="font-size: 12px; color: #9ca3af;">Stability: ${score.stability.toFixed(3)}</div>
+                        </div>
+                        <div class="law-score-value">${score.score.toFixed(4)}</div>
+                    </div>
+                `).join('');
+            },
+            
+            exportData() {
+                let csv = 'Volley,Magnitude,Intent,Memory,GlobalStress\n';
+                RCF.history.forEach(point => {
+                    csv += `${point.volley},${point.magnitude},${point.intent},${point.memory},${point.globalStress}\n`;
+                });
+                
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `rcf_run_${Date.now()}.csv`;
+                a.click();
+            },
+            
+            async saveToPuter() {
+                try {
+                    let csv = 'Volley,Magnitude,Intent,Memory,GlobalStress\n';
+                    RCF.history.forEach(point => {
+                        csv += `${point.volley},${point.magnitude},${point.intent},${point.memory},${point.globalStress}\n`;
+                    });
+                    
+                    await puter.fs.write(
+                        `rcf_run_${Date.now()}.csv`,
+                        csv,
+                        { dedupeName: true }
+                    );
+                    
+                    puter.ui.alert('Data saved to Puter filesystem!');
+                } catch (error) {
+                    puter.ui.alert('Error saving to Puter: ' + error.message);
+                }
+            }
+        };
+        
+        // Initialize
+        RCF.init(3, 200);
+        UI.init();
+        UI.update();
+    </script>
+</body>
+</html>

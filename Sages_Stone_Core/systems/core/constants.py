@@ -1,0 +1,8 @@
+
+import math
+PHI = (1 + 5 ** 0.5) / 2
+TAU = 2 * math.pi
+BASE_FREQUENCY = 432.0
+TIME_STEP = 0.01
+DEFAULT_ENTROPY_LIMIT = 0.618
+DEFAULT_COHERENCE_MIN = 0.382
