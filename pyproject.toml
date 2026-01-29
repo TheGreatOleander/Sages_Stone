@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sages-stone"
+version = "0.1.0"
+description = "Sage’s Stone: a symbolic systems framework built on the Reality Constraint Framework (RCF)."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Dual License: Apache-2.0 OR GPL-3.0" }
+authors = [{ name = "James Stambaugh" }]
+
+dependencies = ["numpy"]
