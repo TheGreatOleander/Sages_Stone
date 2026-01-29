@@ -1,14 +1,25 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=77.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "sages-stone"
 version = "0.1.0"
-description = "Sage’s Stone: a symbolic systems framework built on the Reality Constraint Framework (RCF)."
+description = "Sage's Stone core system"
 readme = "README.md"
-requires-python = ">=3.9"
-license = { text = "Dual License: Apache-2.0 OR GPL-3.0" }
-authors = [{ name = "James Stambaugh" }]
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Jimmyjug777" }
+]
 
-dependencies = ["numpy"]
+dependencies = []
+
+[tool.setuptools]
+# EXPLICITLY declare the ONE installable package.
+# Everything else in the repo is non-installable research/support.
+packages = ["sages_stone"]
+
+[tool.setuptools.package-data]
+sages_stone = ["**/*"]
+
