@@ -1,12 +1,9 @@
-# Sage’s Stone
+Sage’s Stone — A Truth Detection Engine
 
-Sage’s Stone is a symbolic systems framework built around the **Reality Constraint Framework (RCF)**.
+Sage’s Stone is a constraint-driven framework for detecting
+structural truths by observing what collapses when assumptions
+are removed.
 
-## Run Demo
-```bash
-python -m sages_stone
-```
+It does not predict answers.
+It identifies which rules are necessary.
 
-## License
-Dual licensed under **Apache License 2.0** or **GNU GPL v3**.
-See `LICENSE-APACHE` and `LICENSE-GPL`.
