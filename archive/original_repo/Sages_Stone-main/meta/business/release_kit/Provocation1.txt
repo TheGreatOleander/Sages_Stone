@@ -1,6 +1,0 @@
-I built a tool to find the edge of a system’s reality.
-Most fuzzers crash software — this one crashes assumptions.
-
-If you want to dive into the deep end go see for yourself...
-
-https://github.com/TheGreatOleander/RCF

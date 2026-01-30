@@ -1,7 +1,0 @@
-README.md
-pyproject.toml
-sages_stone.egg-info/PKG-INFO
-sages_stone.egg-info/SOURCES.txt
-sages_stone.egg-info/dependency_links.txt
-sages_stone.egg-info/top_level.txt
-systems/__init__.py
