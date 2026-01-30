@@ -11,7 +11,6 @@ This repository is intentionally layered:
 - `demos/` — runnable value demonstrations
 - `examples/` — educational snippets
 - `research/` — exploratory work (may not run)
-- `archive/` — preserved history (frozen)
 
 ---
 
