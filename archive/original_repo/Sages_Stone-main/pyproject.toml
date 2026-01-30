@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sages-stone"
+version = "0.1.0"
+description = "Sage's Stone core system"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "TheGreatOleander" }
+]
+
+dependencies = []
+
+[tool.setuptools]
+# This is the ONLY real Python package in the repo
+packages = ["systems"]
+
+[tool.setuptools.package-data]
+systems = ["**/*"]
+
+[project.scripts]
+sages-stone = "systems.cli:main"
