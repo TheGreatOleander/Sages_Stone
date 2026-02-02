@@ -29,24 +29,19 @@ Everything here is built to be:
 
 ## Repository Structure
 
-The repository is intentionally stratified. Each layer has a different truth‑contract.
+The repository is intentionally minimal at this stage. What exists here is the *hardened spine* — not a showcase.
 
 ```
 Sages_Stone/
 ├─ systems/        # Canonical engine (always runs, lowest entropy)
-├─ docs/           # Technical specs, calculus notes, design contracts
-├─ demos/          # Runnable demonstrations (value proofs)
-├─ examples/       # Educational or illustrative snippets
-├─ research/       # Exploratory work (may be incomplete or non‑runnable)
+│  └─ core/        # Minimal invariant core (lenses, contracts)
+├─ docs/           # Technical specs, formal notes, design contracts
 ├─ pyproject.toml  # Build + dependency contract
+├─ LICENSE
 └─ README.md       # You are here
 ```
 
-**Rule of thumb:**
-If it must never lie → `systems/`
-If it must teach → `examples/`
-If it must convince → `demos/`
-If it might break → `research/`
+If you are looking for demos or examples: they are **not present yet**. That absence is intentional.
 
 ---
 
@@ -63,19 +58,23 @@ These are not metaphors. They are enforced by code layout and execution paths.
 
 ## Quick Start
 
-Editable install (recommended for exploration):
+At present, Sage’s Stone exposes a **stable core**, not a runnable demo suite.
+
+Editable install (for inspection and extension):
 
 ```bash
 pip install -e .
 ```
 
-Run a basic demonstration:
+To verify integrity, you should be able to import the core without side effects:
 
-```bash
-python demos/demo_basic.py
+```python
+from systems.core.lens_base import Lens
 ```
 
-If that executes cleanly, the spine is intact.
+If this imports cleanly, the spine is intact.
+
+Demos and executable dreams are expected to be added *on top of this*, not baked into it.
 
 ---
 
