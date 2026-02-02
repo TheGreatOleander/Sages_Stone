@@ -162,6 +162,11 @@ Thank you for keeping the stone warm.
 ## Final Note
 
 This repository is designed to show a **technical ceiling**.
+
+Right now, that ceiling is being established by building the **runtime itself**.
+
+Demos are deliberately absent because they would be dishonest before the execution contract is finished. The runtime comes first; demonstrations submit to it later.
+
 Not everything needs to be built — but what *is* built must be real.
 
 If you extend this, leave it saner than you found it.
